@@ -1,0 +1,13 @@
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.GenericIdentificationAny {
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 10px;
+}
