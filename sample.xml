@@ -72,25 +72,64 @@
             <Ctry>pl</Ctry>
             <ShrtNm>Test terminal</ShrtNm>
           </Id>
-          <SysNm>str1234</SysNm>
-          <GrpId>str1234</GrpId>
+          <SysNm>SYS001</SysNm>
+          <GrpId>GRP001</GrpId>
           <Cpblties>
-            <CardRdngCpblties>TAGC</CardRdngCpblties>
-            <CrdhldrVrfctnCpblties>APKI</CrdhldrVrfctnCpblties>
-            <PINLngthCpblties>123.45</PINLngthCpblties>
-            <ApprvlCdLngth>123.45</ApprvlCdLngth>
-            <MxScrptLngth>123.45</MxScrptLngth>
+            <CardRdngCpblties>PHYS</CardRdngCpblties>
+            <CardRdngCpblties>MGST</CardRdngCpblties>
+            <CardRdngCpblties>CICC</CardRdngCpblties>
+            <CardRdngCpblties>CDFL</CardRdngCpblties>
+            <CrdhldrVrfctnCpblties>MNSG</CrdhldrVrfctnCpblties>
+            <CrdhldrVrfctnCpblties>MNVR</CrdhldrVrfctnCpblties>
+            <CrdhldrVrfctnCpblties>FCPN</CrdhldrVrfctnCpblties>
+            <CrdhldrVrfctnCpblties>NPIN</CrdhldrVrfctnCpblties>
+            <PINLngthCpblties>4</PINLngthCpblties>
+            <MxScrptLngth>1024</MxScrptLngth>
             <CardCaptrCpbl>true</CardCaptrCpbl>
-            <OnLineCpblties>OFLN</OnLineCpblties>
+            <OnLineCpblties>SMON</OnLineCpblties>
             <MsgCpblties>
               <Dstn>CDSP</Dstn>
               <AvlblFrmt>MREF</AvlblFrmt>
-              <NbOfLines>123.45</NbOfLines>
-              <LineWidth>123.45</LineWidth>
-              <AvlblLang>str1234</AvlblLang>
+              <AvlblFrmt>TEXT</AvlblFrmt>
+              <NbOfLines>1</NbOfLines>
+              <LineWidth>24</LineWidth>
+              <AvlblLang>en</AvlblLang>
+              <AvlblLang>pl</AvlblLang>
+              <AvlblLang>fr</AvlblLang>
+              <AvlblLang>de</AvlblLang>
+            </MsgCpblties>
+            <MsgCpblties>
+              <Dstn>MDSP</Dstn>
+              <AvlblFrmt>MREF</AvlblFrmt>
+              <AvlblFrmt>TEXT</AvlblFrmt>
+              <NbOfLines>1</NbOfLines>
+              <LineWidth>24</LineWidth>
+              <AvlblLang>en</AvlblLang>
+            </MsgCpblties>
+            <MsgCpblties>
+              <Dstn>CRCP</Dstn>
+              <AvlblFrmt>TEXT</AvlblFrmt>
+              <NbOfLines>10</NbOfLines>
+              <LineWidth>40</LineWidth>
+              <AvlblLang>en</AvlblLang>
+              <AvlblLang>pl</AvlblLang>
+              <AvlblLang>fr</AvlblLang>
+              <AvlblLang>de</AvlblLang>
+            </MsgCpblties>
+            <MsgCpblties>
+              <Dstn>MRCP</Dstn>
+              <AvlblFrmt>TEXT</AvlblFrmt>
+              <NbOfLines>10</NbOfLines>
+              <LineWidth>40</LineWidth>
+              <AvlblLang>en</AvlblLang>
+            </MsgCpblties>
+              <Dstn>CRDO</Dstn>
+              <AvlblFrmt>TEXT</AvlblFrmt>
+              <AvlblFrmt>HTML</AvlblFrmt>
+            <MsgCpblties>
             </MsgCpblties>
           </Cpblties>
-          <TmZone>str1234</TmZone>
+          <TmZone>Europe/Warsaw</TmZone>
           <TermnlIntgtn>INDR</TermnlIntgtn>
           <Cmpnt>
             <Tp>AQPP</Tp>
@@ -872,12 +911,25 @@
       </SplmtryData>
     </AuthstnReq>
     <SctyTrlr>
-      <CnttTp>DATA</CnttTp>
+      <CnttTp>AUTH</CnttTp>
       <AuthntcdData>
-        <Vrsn>123.45</Vrsn>
-        <Rcpt />
+        <Vrsn>1.1</Vrsn>
+        <Rcpt>
+          <KEK>
+            <Vrsn>2</Vrsn>
+            <KEKId>
+              <KeyId>AK-R001</KeyId>
+              <KeyVrsn>1</KeyVrsn>
+              <DerivtnId>MTIzNDUK</DerivtnId>
+            </KEKId>
+            <KeyNcrptnAlgo>
+              <Algo>DKP9</Algo>
+            </KeyNcrptnAlgo>
+            <NcrptdKey>cXdlcnR5Cg==</NcrptdKey>
+          </KEK>
+        </Rcpt>
         <MACAlgo>
-          <Algo>MACC</Algo>
+          <Algo>MCCS</Algo>
           <Param>
             <InitlstnVctr>AAAAZg==</InitlstnVctr>
             <BPddg>LNGT</BPddg>

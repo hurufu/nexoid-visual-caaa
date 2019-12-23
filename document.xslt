@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
   <xsl:output method="html" doctype-public="XSLT-compat" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
   <xsl:strip-space elements="*"/>
@@ -21,7 +21,7 @@
       v.<xsl:value-of select="Hdr/PrtcolVrsn"/>
     </span>
     <span class="right">
-      &#x2116;<xsl:value-of select="Hdr/XchgId"/>
+      №<xsl:value-of select="Hdr/XchgId"/>
     </span>
     <br/>
     <time class="right">
@@ -38,12 +38,14 @@
       This checking will include validation of the card data and any additional
       transaction data provided.
     </blockquote>
-    <xsl:apply-templates select="Hdr"/>
-    <xsl:apply-templates select="AuthstnReq"/>
-    <xsl:apply-templates select="SctyTrlr"/>
+    <xsl:apply-templates mode="Document"/>
+  </xsl:template>
+  <xsl:template match="AccptrAuthstnReq[not(SctyTrlr)]">
+    <hr/>
+    No security trailer found
   </xsl:template>
   <!-- -->
-  <xsl:template match="AuthstnReq">
+  <xsl:template match="AuthstnReq" mode="Document">
     <h3>Authorisation Request</h3>
     <xsl:apply-templates select="Tx"/>
   </xsl:template>
@@ -66,7 +68,7 @@
     </dd>
   </xsl:template>
   <!-- -->
-  <xsl:template match="Hdr">
+  <xsl:template match="Hdr" mode="Document">
     <h3>Header</h3>
     <dl>
       <xsl:apply-templates select="InitgPty|RcptPty|Tracblt" mode="x"/>
@@ -157,12 +159,99 @@
       <xsl:value-of select="."/>
     </dd>
   </xsl:template>
-  <!-- -->
-  <xsl:template match="SctyTrlr" name="ContentInformationType16">
-    <hr/>
-    <pre>Security trailer ommited</pre>
+
+
+  <!-- START Security Trailer -->
+  <xsl:template match="SctyTrlr" name="ContentInformationType16" mode="Document">
+    <h3>Security information</h3>
+    <xsl:apply-templates mode="SecurityTrailer"/>
   </xsl:template>
+
   <!-- -->
+
+  <xsl:template match="AuthntcdData" name="AuthenticatedData5">
+    <xsl:apply-templates mode="SecurityTrailer"/>
+  </xsl:template>
+
+  <!-- -->
+
+  <xsl:template match="Vrsn" mode="SecurityTrailer">
+    v.<xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="AuthntcdData/Rcpt" mode="SecurityTrailer">
+    <xsl:apply-templates mode="SecurityTrailer"/>
+  </xsl:template>
+
+  <xsl:template match="MACAlgo" mode="SecurityTrailer">
+    <dl>
+      <dt>Algorithm</dt>
+      <dd><xsl:value-of select="Algo"/></dd>
+      <dt>Initialisation vector</dt>
+      <dd><xsl:value-of select="Param/InitlstnVctr"/></dd>
+      <dt>Byte padding</dt>
+      <dd><xsl:value-of select="Param/BPddg"/></dd>
+    </dl>
+  </xsl:template>
+
+  <xsl:template match="NcpsltdCntt" mode="SecurityTrailer">
+    <xsl:apply-templates mode="SecurityTrailer"/>
+  </xsl:template>
+
+  <xsl:template match="MAC" mode="SecurityTrailer">
+    <span class="right">
+      <abbr title="Message Authentication Code">MAC</abbr>
+      <xsl:text>: </xsl:text>
+      <code>
+        <xsl:value-of select="."/>
+      </code>
+    </span>
+  </xsl:template>
+
+  <xsl:template match="AuthntcdData/Rcpt/KEK" mode="SecurityTrailer">
+    <p>
+      <xsl:text>Signed with: </xsl:text>
+      <xsl:value-of select="KEKId/KeyId"/>
+      <xsl:text> v.</xsl:text>
+      <xsl:value-of select="KEKId/KeyVrsn"/>
+      <xsl:text> </xsl:text>
+      <code>[<xsl:value-of select="KEKId/DerivtnId"/>]</code>
+    </p>
+  </xsl:template>
+
+  <xsl:template match="AuthntcdData/Rcpt/KeyTrnsprt" mode="SecurityTrailer">
+    <xsl:message terminate="yes">Not implemented</xsl:message>
+  </xsl:template>
+
+  <xsl:template match="AuthntcdData/Rcpt/KeyIdr" mode="SecurityTrailer">
+    <xsl:message terminate="yes">Not implemented</xsl:message>
+  </xsl:template>
+
+  <xsl:template match="KEK/KEKId" mode="SecurityTrailer">
+    <dl>
+      <xsl:apply-templates/>
+    </dl>
+  </xsl:template>
+
+  <!-- -->
+
+  <xsl:template match="CnttTp" mode="SecurityTrailer">
+    <abbr>
+      <xsl:attribute name="title">
+        <xsl:choose>
+          <xsl:when test=". = 'DATA'">Generic, non-cryptographic, or unqualified data content</xsl:when>
+          <xsl:when test=". = 'SIGN'">Digital signature</xsl:when>
+          <xsl:when test=". = 'EVLP'">Encrypted data, with encryption key</xsl:when>
+          <xsl:when test=". = 'DGST'">Message digest</xsl:when>
+          <xsl:when test=". = 'AUTH'">MAC with encryption key</xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:value-of select="."/>
+    </abbr>
+    <xsl:text>: </xsl:text>
+  </xsl:template>
+  <!-- END Security Trailer -->
+
   <xsl:template match="Hdr/MsgFctn" mode="y">
     <abbr>
       <xsl:attribute name="title">
