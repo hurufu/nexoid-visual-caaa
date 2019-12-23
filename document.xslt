@@ -16,6 +16,7 @@
 
   <xsl:strip-space elements="*"/>
 
+  <!-- Main template that will match root element -->
   <xsl:template match="/Document">
     <xsl:comment>Warning: Current XML style sheet is work-in-progress, so a lot of features mey be unavailable</xsl:comment>
     <html>
@@ -28,6 +29,7 @@
       </body>
     </html>
   </xsl:template>
+
   <!-- -->
   <xsl:template match="AccptrAuthstnReq">
     <h2>Acceptor Authorisation Request</h2>
@@ -51,10 +53,13 @@
     </span>
     <br/>
     <blockquote cite="http://www.iso20022.org/">
-      This message is sent to check with the issuer (or its agent) that the
-      account associated to the card has the resources to fund the payment.
-      This checking will include validation of the card data and any additional
-      transaction data provided.
+      <xsl:variable name="MessageDescription">
+        This message is sent to check with the issuer (or its agent) that the
+        account associated to the card has the resources to fund the payment.
+        This checking will include validation of the card data and any additional
+        transaction data provided.
+      </xsl:variable>
+      <xsl:value-of select="normalize-space($MessageDescription)"/>
     </blockquote>
     <xsl:apply-templates mode="Document"/>
   </xsl:template>
