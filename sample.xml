@@ -46,15 +46,13 @@
           <LctnAndCtct>
             <PstlAdr>
               <AdrTp>PBOX</AdrTp>
-              <Dept>str1234</Dept>
-              <SubDept>str1234</SubDept>
-              <AdrLine>str1234</AdrLine>
-              <StrtNm>str1234</StrtNm>
-              <BldgNb>str1234</BldgNb>
-              <PstCd>03-732</PstCd>
+              <AdrLine>skr. poczt. 123, ul. Pocztowa 1, 00-950 Warszawa</AdrLine>
+              <StrtNm>Pocztowa</StrtNm>
+              <BldgNb>1</BldgNb>
+              <PstCd>00-950</PstCd>
               <TwnNm>Warsawa</TwnNm>
-              <CtrySubDvsn>str1234</CtrySubDvsn>
-              <CtryCd>str1234</CtryCd>
+              <CtrySubDvsn>mazowieckie</CtrySubDvsn>
+              <CtryCd>pl</CtryCd>
             </PstlAdr>
             <Email>contact@cool.merch</Email>
             <URLAdr>https://cool.merch/</URLAdr>
