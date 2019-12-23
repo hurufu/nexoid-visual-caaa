@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
-  <xsl:output method="html" doctype-public="XSLT-compat" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
+<xsl:stylesheet
+  version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output
+    method="html"
+    encoding="utf-8"
+    omit-xml-declaration="yes"
+    doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+    media-type="text/html"
+    indent="no"/>
   <xsl:strip-space elements="*"/>
   <xsl:template match="/Document">
     <html>
       <head>
         <title>ISO 20022 message</title>
         <link rel="stylesheet" type="text/css" href="document.css"/>
-        <meta charset="UTF-8"/>
       </head>
       <body>
         <xsl:apply-templates/>
@@ -18,10 +26,12 @@
   <xsl:template match="AccptrAuthstnReq">
     <h2>Acceptor Authorisation Request</h2>
     <span class="left">
-      v.<xsl:value-of select="Hdr/PrtcolVrsn"/>
+      <xsl:text>v.</xsl:text>
+      <xsl:value-of select="Hdr/PrtcolVrsn"/>
     </span>
     <span class="right">
-      №<xsl:value-of select="Hdr/XchgId"/>
+      <xsl:text>№</xsl:text>
+      <xsl:value-of select="Hdr/XchgId"/>
     </span>
     <br/>
     <time class="right">
@@ -29,7 +39,9 @@
     </time>
     <span class="left">
       <xsl:apply-templates select="Hdr/MsgFctn" mode="y"/>
-      (capture: <xsl:value-of select="AuthstnReq/Tx/TxCaptr"/>)
+      <xsl:if test="AuthstnReq/Tx/TxCaptr">
+        <xsl:text> (with capture)</xsl:text>
+      </xsl:if>
     </span>
     <br/>
     <blockquote cite="http://www.iso20022.org/">
@@ -49,6 +61,7 @@
     <h3>Authorisation Request</h3>
     <xsl:apply-templates select="Tx"/>
   </xsl:template>
+  <!-- -->
   <xsl:template match="AuthstnReq/Tx">
     <h4>Transaction</h4>
     <dl>
@@ -67,38 +80,59 @@
       </time>
     </dd>
   </xsl:template>
-  <!-- -->
+  <!-- ******************************************************************** -->
+
+
+  <!-- Header which lists transaction participants -->
+
+  <!-- Participant list in a nested definition list -->
   <xsl:template match="Hdr" mode="Document">
-    <h3>Header</h3>
+    <h3>Participated parties</h3>
     <dl>
-      <xsl:apply-templates select="InitgPty|RcptPty|Tracblt" mode="x"/>
+      <xsl:apply-templates select="*[*]" mode="style-is-dd-dl"/>
     </dl>
   </xsl:template>
+
+  <!-- Applies template dd-dl to every nested element of Hdr -->
+  <xsl:template match="Hdr/*[*]" mode="style-is-dd-dl" name="TransactionParticipants">
+    <xsl:call-template name="dd-dl">
+      <xsl:with-param name="name">
+        <xsl:call-template name="HeaderDescription">
+          <xsl:with-param name="nodename" select="local-name()"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- Select dt heading value used for TransactionParticipants template -->
+  <xsl:template name="HeaderDescription">
+    <xsl:param name="nodename"/>
+    <xsl:choose>
+      <xsl:when test="$nodename = 'InitgPty'">Initiated by</xsl:when>
+      <xsl:when test="$nodename = 'RcptPty'">Recipient</xsl:when>
+      <xsl:when test="$nodename = 'Tracblt'">Tracebility (<xsl:value-of select="position()"/>)</xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="yes">Unexpected name for TransactionParticipants template</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Template that organizes everything it matches inside a definition list -->
+  <xsl:template name="dd-dl">
+    <xsl:param name="name"/>
+    <dt>
+      <xsl:value-of select="$name"/>
+      <xsl:text>:</xsl:text>
+    </dt>
+    <dd>
+      <dl>
+        <xsl:apply-templates/>
+      </dl>
+    </dd>
+  </xsl:template>
   <!-- -->
-  <xsl:template match="Hdr/InitgPty" mode="x">
-    <dt>Initiated by:</dt>
-    <dd>
-      <dl>
-        <xsl:apply-templates/>
-      </dl>
-    </dd>
-  </xsl:template>
-  <xsl:template match="Hdr/RcptPty" mode="x">
-    <dt>Recipient:</dt>
-    <dd>
-      <dl>
-        <xsl:apply-templates/>
-      </dl>
-    </dd>
-  </xsl:template>
-  <xsl:template match="Hdr/Tracblt" mode="x">
-    <dt>Tracebility (<xsl:value-of select="position()"/>):</dt>
-    <dd>
-      <dl>
-        <xsl:apply-templates/>
-      </dl>
-    </dd>
-  </xsl:template>
+
+  <!-- -->
   <xsl:template match="Id">
     <dt>Id</dt>
     <dd>
@@ -176,7 +210,8 @@
   <!-- -->
 
   <xsl:template match="Vrsn" mode="SecurityTrailer">
-    v.<xsl:value-of select="."/>
+    <xsl:text>v.</xsl:text>
+    <xsl:value-of select="."/>
   </xsl:template>
 
   <xsl:template match="AuthntcdData/Rcpt" mode="SecurityTrailer">
