@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet
   version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+>
+
   <xsl:output
     method="html"
     encoding="utf-8"
@@ -9,9 +11,13 @@
     doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
     doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
     media-type="text/html"
-    indent="no"/>
+    indent="no"
+  />
+
   <xsl:strip-space elements="*"/>
+
   <xsl:template match="/Document">
+    <xsl:comment>Warning: Current XML style sheet is work-in-progress, so a lot of features mey be unavailable</xsl:comment>
     <html>
       <head>
         <title>ISO 20022 message</title>
