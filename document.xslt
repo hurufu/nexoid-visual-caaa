@@ -16,9 +16,9 @@
 
   <xsl:strip-space elements="*"/>
 
-  <!-- Main template that will match root element -->
-  <xsl:template match="/Document">
-    <xsl:comment>Warning: Current XML style sheet is work-in-progress, so a lot of features mey be unavailable</xsl:comment>
+  <!-- Main template setups <head> and executues all other templates -->
+  <xsl:template match="/*">
+    <xsl:comment>Current XML style sheet is work-in-progress, so a lot of features mey be unavailable</xsl:comment>
     <html>
       <head>
         <title>ISO 20022 message</title>
@@ -31,8 +31,14 @@
   </xsl:template>
 
   <!-- -->
-  <xsl:template match="AccptrAuthstnReq">
-    <h2>Acceptor Authorisation Request</h2>
+  <xsl:template match="AccptrAuthstnReq" mode="style-is-enum">
+    <xsl:text>Acceptor Authorisation Request</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="Document/*">
+    <h2>
+      <xsl:apply-templates select="." mode="style-is-enum"/>
+    </h2>
     <span class="left">
       <xsl:text>v.</xsl:text>
       <xsl:value-of select="Hdr/PrtcolVrsn"/>
@@ -47,7 +53,7 @@
     </time>
     <span class="left">
       <xsl:apply-templates select="Hdr/MsgFctn" mode="y"/>
-      <xsl:if test="AuthstnReq/Tx/TxCaptr">
+      <xsl:if test="*/Tx/TxCaptr">
         <xsl:text> (with capture)</xsl:text>
       </xsl:if>
     </span>
@@ -56,22 +62,29 @@
       <xsl:variable name="MessageDescription">
         This message is sent to check with the issuer (or its agent) that the
         account associated to the card has the resources to fund the payment.
-        This checking will include validation of the card data and any additional
-        transaction data provided.
+        This checking will include validation of the card data and any
+        additional transaction data provided.
       </xsl:variable>
       <xsl:value-of select="normalize-space($MessageDescription)"/>
     </blockquote>
     <xsl:apply-templates mode="Document"/>
   </xsl:template>
-  <xsl:template match="AccptrAuthstnReq[not(SctyTrlr)]">
+  <!-- -->
+  <xsl:template match="Document/*[not(SctyTrlr)]">
     <hr/>
-    No security trailer found
+    <xsl:text>No security trailer found</xsl:text>
   </xsl:template>
   <!-- -->
+
+
+  <!-- Main body of the output document -->
+
+  <!-- Auth Request -->
   <xsl:template match="AuthstnReq" mode="Document">
     <h3>Authorisation Request</h3>
     <xsl:apply-templates select="Tx"/>
   </xsl:template>
+
   <!-- -->
   <xsl:template match="AuthstnReq/Tx">
     <h4>Transaction</h4>
