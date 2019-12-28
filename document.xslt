@@ -18,7 +18,7 @@
 
   <!-- Main template setups <head> and executues all other templates -->
   <xsl:template match="/*">
-    <xsl:comment>Current XML style sheet is work-in-progress, so a lot of features mey be unavailable</xsl:comment>
+    <xsl:comment>Current XML style sheet is work-in-progress, so a lot of features may be unavailable</xsl:comment>
     <html>
       <head>
         <title>ISO 20022 message</title>
