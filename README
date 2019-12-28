@@ -1,0 +1,12 @@
+% [WIP] Sample transformation for CAAA message
+% Aleksy Grabowski <hurufu@gmail.com>
+
+> Current XML style sheet is work-in-progress, so a lot of features may be
+> unavailable.
+
+The main purpose is to help with understanding with ISO 20022 message for
+non-programmers, but it may be helpful also for programmers alike, because of
+increased readability and in-place documentation.
+
+In order to test this style sheet just open sample.xml in any browser that
+supports XSLT.
