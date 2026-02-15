@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ISO 20022 message</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #000;
+        }
+        
+        .document-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: #000;
+            color: #fff;
+            padding: 15px 20px;
+            border-bottom: 3px double #000;
+        }
+        
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 10px;
+        }
+        
+        .left {
+            text-align: left;
+        }
+        
+        .right {
+            text-align: right;
+        }
+        
+        time {
+            font-weight: bold;
+            font-family: monospace;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        blockquote {
+            background: #f9f9f9;
+            border-left: 4px solid #666;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 10px;
+            font-style: italic;
+            color: #333;
+        }
+        
+        blockquote::before {
+            content: "ℹ ";
+            font-style: normal;
+            font-weight: bold;
+        }
+        
+        h3 {
+            background: #e0e0e0;
+            padding: 8px 10px;
+            margin: 20px -20px 10px -20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            letter-spacing: 0.5px;
+        }
+        
+        h4 {
+            background: #f0f0f0;
+            padding: 6px 10px;
+            margin: 15px -20px 8px -20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 1px solid #999;
+        }
+        
+        dl {
+            margin: 10px 0;
+        }
+        
+        dt {
+            font-weight: bold;
+            margin-top: 8px;
+            padding: 3px 5px;
+            background: #f5f5f5;
+            border-left: 3px solid #666;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        dd {
+            margin-left: 25px;
+            padding: 3px 5px;
+            font-family: 'Courier New', monospace;
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        dd:last-child {
+            margin-bottom: 10px;
+        }
+        
+        dd dl {
+            margin: 5px 0 5px 10px;
+            padding: 8px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+        }
+        
+        dd dl dt {
+            font-size: 9px;
+            background: #e8e8e8;
+            margin-top: 3px;
+        }
+        
+        dd dl dd {
+            margin-left: 15px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        abbr {
+            text-decoration: none;
+            border-bottom: 1px dotted #666;
+            cursor: help;
+            font-weight: bold;
+            padding: 2px 4px;
+            background: #ffe;
+        }
+        
+        code {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            border: 1px solid #000;
+            display: inline-block;
+        }
+        
+        .security-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff9e6;
+            border: 2px solid #ffcc00;
+            position: relative;
+        }
+        
+        .security-section::before {
+            content: "🔒 ";
+            font-size: 14px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        
+        .security-section p {
+            margin: 8px 0;
+            font-size: 10px;
+        }
+        
+        .mac-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+        
+        .mac-info abbr {
+            background: #ffcccc;
+            font-size: 11px;
+        }
+        
+        .transaction-id {
+            font-weight: bold;
+            font-size: 12px;
+            color: #c00;
+        }
+        
+        .footer {
+            background: #000;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 9px;
+            border-top: 3px double #000;
+        }
+        
+        .meta-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            font-size: 10px;
+        }
+        
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            
+            .document-container {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <div class="header">
+            <h2>Acceptor Authorisation Request</h2>
+            <div class="header-info">
+                <span class="left">v.08</span>
+                <span class="right">№12345678</span>
+            </div>
+            <div class="header-info">
+                <span class="left"><abbr title="Financial authorisation request">FAUQ</abbr> (with capture)</span>
+                <time class="right">2012-12-13T12:12:12</time>
+            </div>
+        </div>
+        
+        <div class="content">
+            <blockquote cite="http://www.iso20022.org/">
+                This message is sent to check with the issuer (or its agent) that the account associated to the card has the resources to fund the payment. This checking will include validation of the card data and any additional transaction data provided.
+            </blockquote>
+            
+            <h3>Participated parties</h3>
+            <dl>
+                <dt>Initiated by:</dt>
+                <dd>
+                    <dl>
+                        <dt>Id</dt>
+                        <dd>TR0001</dd>
+                        <dt>Type</dt>
+                        <dd>PoI</dd>
+                        <dt>Assigned by</dt>
+                        <dd>Merchant</dd>
+                        <dt>Country</dt>
+                        <dd>pl</dd>
+                        <dt>Short name</dt>
+                        <dd>Null terminal</dd>
+                    </dl>
+                </dd>
+                
+                <dt>Recipient:</dt>
+                <dd>
+                    <dl>
+                        <dt>Id</dt>
+                        <dd>CIV0001</dd>
+                        <dt>Type</dt>
+                        <dd>Card issuer</dd>
+                        <dt>Assigned by</dt>
+                        <dd>Merchant</dd>
+                        <dt>Country</dt>
+                        <dd>pl</dd>
+                        <dt>Short name</dt>
+                        <dd>Visa Card Scheme</dd>
+                    </dl>
+                </dd>
+            </dl>
+            
+            <h3>Authorisation Request</h3>
+            <h4>Transaction</h4>
+            <dl>
+                <dt>transaction id</dt>
+                <dd class="transaction-id">RX0064824</dd>
+                <dt>timestamp</dt>
+                <dd><time>2012-12-13T12:12:11</time></dd>
+            </dl>
+            
+            <div class="security-section">
+                <h3 style="margin: 0 0 10px 0; background: transparent; border: none; padding: 0; font-size: 12px;">Security information</h3>
+                
+                <p><abbr title="MAC with encryption key">AUTH</abbr>: v.1.1</p>
+                <p>Signed with: AK-R001 v.1 <code>[MTIzNDUK]</code></p>
+                
+                <dl>
+                    <dt>Algorithm</dt>
+                    <dd>MCCS</dd>
+                    <dt>Initialisation vector</dt>
+                    <dd>AAAAZg==</dd>
+                    <dt>Byte padding</dt>
+                    <dd>LNGT</dd>
+                </dl>
+                
+                <div class="mac-info">
+                    <div>
+                        <abbr title="Generic, non-cryptographic, or unqualified data content">DATA</abbr>: AAAAZg==
+                    </div>
+                    <div>
+                        <abbr title="Message Authentication Code">MAC</abbr>: <code>AAAAZg==</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            ISO 20022 COMPLIANT MESSAGE • CONFIDENTIAL TRANSACTION RECORD
+        </div>
+    </div>
+</body>
+</html>
